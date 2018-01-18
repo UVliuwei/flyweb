@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+		
+	 <description>Shiro Configuration</description>  
+
+    <!-- Shiro's main business-tier object for web-enabled applications -->  
+
+    <!-- 項目自定义的Realm -->  
+    <bean id="myShiroRealm" class="com.fly.shiro.MyShiroRealm">  
+        <property name="cacheManager" ref="cacheManager" />  
+    </bean>  
+    
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myShiroRealm" />
+         <property name="rememberMeManager" ref="rememberMeManager" />
+    </bean>
+
+    <!-- Shiro的Web过滤器 --> 
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">  
+    	<!-- securityManager：这个属性是必须的，没什么好说的，就这样配置就好。 -->
+        <property name="securityManager" ref="securityManager" />  
+        <!-- loginUrl：没有登录的用户请求需要登录的页面时自动跳转到登录页面，可配置也可不配置。 -->
+        <!-- successUrl：登录成功默认跳转页面，不配置则跳转至”/”，一般可以不配置，直接通过代码进行处理。 -->
+        <property name="successUrl" value="/user/set" />  
+        <!-- unauthorizedUrl：没有权限默认跳转的页面。 -->
+        <property name="unauthorizedUrl" value="/system/404" />  
+        <property name="filterChainDefinitions">  
+        <!-- /admin=authc,roles[admin] 表示用户必需已通过认证,并拥有admin角色才可以正常发起’/admin’请求 
+			/edit=authc,perms[admin:edit] 表示用户必需已通过认证,并拥有admin:edit权限才可以正常发起’/edit’请求 
+			/home=user 表示用户不一定需要已经通过认证,只需要曾经被Shiro记住过登录状态就可以正常发起’/home’请求 -->
+            <value>  
+              
+            </value>  
+        </property>  
+    </bean>  
+
+    <!-- 用户授权信息Cache -->  
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />  
+
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->  
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />  
+
+    <!-- remenberMe配置 -->
+   <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+       <constructor-arg value="rememberMe" />
+       <property name="httpOnly" value="true" />
+       <!-- 默认记住7天（单位：秒） -->
+       <property name="maxAge" value="604800" />
+   </bean>
+   
+   <!-- 支持Shiro对Controller的方法级AOP安全控制 begin-->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+   
+   <!-- rememberMe管理器 -->
+   <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+       
+       <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}" />
+       <property name="cookie" ref="rememberMeCookie" />
+   </bean> 
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">  
+        <property name="securityManager" ref="securityManager" /> 
+    </bean>  
+</beans>

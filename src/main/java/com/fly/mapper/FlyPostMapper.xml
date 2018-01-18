@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fly.mapper.FlyPostMapper" >
+  <resultMap id="BaseResultMap" type="com.fly.pojo.FlyPost" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="PTYPE" property="ptype" jdbcType="VARCHAR" />
+    <result column="VERSION" property="version" jdbcType="VARCHAR" />
+    <result column="PCOLUMN" property="pcolumn" jdbcType="VARCHAR" />
+    <result column="KISS" property="kiss" jdbcType="INTEGER" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="ANSNUM" property="ansnum" jdbcType="INTEGER" />
+    <result column="POPULARITY" property="popularity" jdbcType="INTEGER" />
+    <result column="BOUTIQUED" property="boutiqued" jdbcType="CHAR" />
+    <result column="TOPPED" property="topped" jdbcType="CHAR" />
+    <result column="ENDED" property="ended" jdbcType="CHAR" />
+    <result column="ACCEPTED" property="accepted" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.fly.pojo.FlyPost" extends="BaseResultMap" >
+    <result column="CONTENT" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, USER_ID, TITLE, PTYPE, VERSION, PCOLUMN, KISS, CREATE_DATE, ANSNUM, POPULARITY, 
+    BOUTIQUED, TOPPED, ENDED, ACCEPTED, UPDATE_DATE
+  </sql>
+  <sql id="Blob_Column_List" >
+    CONTENT
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.fly.pojo.FlyPostExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from fly_post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fly.pojo.FlyPostExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from fly_post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from fly_post
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from fly_post
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fly.pojo.FlyPostExample" >
+    delete from fly_post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fly.pojo.FlyPost" >
+    insert into fly_post (ID, USER_ID, TITLE, 
+      PTYPE, VERSION, PCOLUMN, 
+      KISS, CREATE_DATE, ANSNUM, 
+      POPULARITY, BOUTIQUED, TOPPED, 
+      ENDED, ACCEPTED, UPDATE_DATE, 
+      CONTENT)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{ptype,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, #{pcolumn,jdbcType=VARCHAR}, 
+      #{kiss,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{ansnum,jdbcType=INTEGER}, 
+      #{popularity,jdbcType=INTEGER}, #{boutiqued,jdbcType=CHAR}, #{topped,jdbcType=CHAR}, 
+      #{ended,jdbcType=CHAR}, #{accepted,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fly.pojo.FlyPost" >
+    insert into fly_post
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="title != null" >
+        TITLE,
+      </if>
+      <if test="ptype != null" >
+        PTYPE,
+      </if>
+      <if test="version != null" >
+        VERSION,
+      </if>
+      <if test="pcolumn != null" >
+        PCOLUMN,
+      </if>
+      <if test="kiss != null" >
+        KISS,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="ansnum != null" >
+        ANSNUM,
+      </if>
+      <if test="popularity != null" >
+        POPULARITY,
+      </if>
+      <if test="boutiqued != null" >
+        BOUTIQUED,
+      </if>
+      <if test="topped != null" >
+        TOPPED,
+      </if>
+      <if test="ended != null" >
+        ENDED,
+      </if>
+      <if test="accepted != null" >
+        ACCEPTED,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="ptype != null" >
+        #{ptype,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="pcolumn != null" >
+        #{pcolumn,jdbcType=VARCHAR},
+      </if>
+      <if test="kiss != null" >
+        #{kiss,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ansnum != null" >
+        #{ansnum,jdbcType=INTEGER},
+      </if>
+      <if test="popularity != null" >
+        #{popularity,jdbcType=INTEGER},
+      </if>
+      <if test="boutiqued != null" >
+        #{boutiqued,jdbcType=CHAR},
+      </if>
+      <if test="topped != null" >
+        #{topped,jdbcType=CHAR},
+      </if>
+      <if test="ended != null" >
+        #{ended,jdbcType=CHAR},
+      </if>
+      <if test="accepted != null" >
+        #{accepted,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fly.pojo.FlyPostExample" resultType="java.lang.Integer" >
+    select count(*) from fly_post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update fly_post
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        USER_ID = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null" >
+        TITLE = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ptype != null" >
+        PTYPE = #{record.ptype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.version != null" >
+        VERSION = #{record.version,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pcolumn != null" >
+        PCOLUMN = #{record.pcolumn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kiss != null" >
+        KISS = #{record.kiss,jdbcType=INTEGER},
+      </if>
+      <if test="record.createDate != null" >
+        CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ansnum != null" >
+        ANSNUM = #{record.ansnum,jdbcType=INTEGER},
+      </if>
+      <if test="record.popularity != null" >
+        POPULARITY = #{record.popularity,jdbcType=INTEGER},
+      </if>
+      <if test="record.boutiqued != null" >
+        BOUTIQUED = #{record.boutiqued,jdbcType=CHAR},
+      </if>
+      <if test="record.topped != null" >
+        TOPPED = #{record.topped,jdbcType=CHAR},
+      </if>
+      <if test="record.ended != null" >
+        ENDED = #{record.ended,jdbcType=CHAR},
+      </if>
+      <if test="record.accepted != null" >
+        ACCEPTED = #{record.accepted,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateDate != null" >
+        UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.content != null" >
+        CONTENT = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update fly_post
+    set ID = #{record.id,jdbcType=VARCHAR},
+      USER_ID = #{record.userId,jdbcType=VARCHAR},
+      TITLE = #{record.title,jdbcType=VARCHAR},
+      PTYPE = #{record.ptype,jdbcType=VARCHAR},
+      VERSION = #{record.version,jdbcType=VARCHAR},
+      PCOLUMN = #{record.pcolumn,jdbcType=VARCHAR},
+      KISS = #{record.kiss,jdbcType=INTEGER},
+      CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      ANSNUM = #{record.ansnum,jdbcType=INTEGER},
+      POPULARITY = #{record.popularity,jdbcType=INTEGER},
+      BOUTIQUED = #{record.boutiqued,jdbcType=CHAR},
+      TOPPED = #{record.topped,jdbcType=CHAR},
+      ENDED = #{record.ended,jdbcType=CHAR},
+      ACCEPTED = #{record.accepted,jdbcType=VARCHAR},
+      UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
+      CONTENT = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update fly_post
+    set ID = #{record.id,jdbcType=VARCHAR},
+      USER_ID = #{record.userId,jdbcType=VARCHAR},
+      TITLE = #{record.title,jdbcType=VARCHAR},
+      PTYPE = #{record.ptype,jdbcType=VARCHAR},
+      VERSION = #{record.version,jdbcType=VARCHAR},
+      PCOLUMN = #{record.pcolumn,jdbcType=VARCHAR},
+      KISS = #{record.kiss,jdbcType=INTEGER},
+      CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      ANSNUM = #{record.ansnum,jdbcType=INTEGER},
+      POPULARITY = #{record.popularity,jdbcType=INTEGER},
+      BOUTIQUED = #{record.boutiqued,jdbcType=CHAR},
+      TOPPED = #{record.topped,jdbcType=CHAR},
+      ENDED = #{record.ended,jdbcType=CHAR},
+      ACCEPTED = #{record.accepted,jdbcType=VARCHAR},
+      UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fly.pojo.FlyPost" >
+    update fly_post
+    <set >
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="ptype != null" >
+        PTYPE = #{ptype,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        VERSION = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="pcolumn != null" >
+        PCOLUMN = #{pcolumn,jdbcType=VARCHAR},
+      </if>
+      <if test="kiss != null" >
+        KISS = #{kiss,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ansnum != null" >
+        ANSNUM = #{ansnum,jdbcType=INTEGER},
+      </if>
+      <if test="popularity != null" >
+        POPULARITY = #{popularity,jdbcType=INTEGER},
+      </if>
+      <if test="boutiqued != null" >
+        BOUTIQUED = #{boutiqued,jdbcType=CHAR},
+      </if>
+      <if test="topped != null" >
+        TOPPED = #{topped,jdbcType=CHAR},
+      </if>
+      <if test="ended != null" >
+        ENDED = #{ended,jdbcType=CHAR},
+      </if>
+      <if test="accepted != null" >
+        ACCEPTED = #{accepted,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.fly.pojo.FlyPost" >
+    update fly_post
+    set USER_ID = #{userId,jdbcType=VARCHAR},
+      TITLE = #{title,jdbcType=VARCHAR},
+      PTYPE = #{ptype,jdbcType=VARCHAR},
+      VERSION = #{version,jdbcType=VARCHAR},
+      PCOLUMN = #{pcolumn,jdbcType=VARCHAR},
+      KISS = #{kiss,jdbcType=INTEGER},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      ANSNUM = #{ansnum,jdbcType=INTEGER},
+      POPULARITY = #{popularity,jdbcType=INTEGER},
+      BOUTIQUED = #{boutiqued,jdbcType=CHAR},
+      TOPPED = #{topped,jdbcType=CHAR},
+      ENDED = #{ended,jdbcType=CHAR},
+      ACCEPTED = #{accepted,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      CONTENT = #{content,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fly.pojo.FlyPost" >
+    update fly_post
+    set USER_ID = #{userId,jdbcType=VARCHAR},
+      TITLE = #{title,jdbcType=VARCHAR},
+      PTYPE = #{ptype,jdbcType=VARCHAR},
+      VERSION = #{version,jdbcType=VARCHAR},
+      PCOLUMN = #{pcolumn,jdbcType=VARCHAR},
+      KISS = #{kiss,jdbcType=INTEGER},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      ANSNUM = #{ansnum,jdbcType=INTEGER},
+      POPULARITY = #{popularity,jdbcType=INTEGER},
+      BOUTIQUED = #{boutiqued,jdbcType=CHAR},
+      TOPPED = #{topped,jdbcType=CHAR},
+      ENDED = #{ended,jdbcType=CHAR},
+      ACCEPTED = #{accepted,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
